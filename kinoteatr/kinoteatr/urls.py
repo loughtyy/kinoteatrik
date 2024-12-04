@@ -19,6 +19,7 @@ from django.urls import path
 from kino import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth.views import LogoutView
 
 
 urlpatterns = [
@@ -28,4 +29,6 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('films/<int:film_id>/', views.film_detail, name='film_detail'),
     path('sessions/', views.session_schedule, name='session_schedule'),
+    path('login/', views.login, name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

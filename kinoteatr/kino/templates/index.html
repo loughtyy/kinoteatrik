@@ -1,46 +1,29 @@
 {% extends "base.html" %} 
 {% load static %}
 {% block content %}
-<body>
     <div class="banner">
         <h1>Добро пожаловать в наш Кинотеатр!</h1>
         <p>Посмотрите последние фильмы в комфортной обстановке.</p>
         <a href="#" class="btn btn-warning">Посмотреть сеансы</a>
     </div>
 
-    <div class="container mt-5">
+    <div class="container mt-5 mb-5">
         <h2 class="text-center">Популярные фильмы</h2>
         <div class="row">
+            {% for film in films %}
             <div class="col-md-4">
                 <div class="card">
-                    <img src="https://via.placeholder.com/300x450" class="card-img-top" alt="Фильм 1">
+                    <img src="{{ film.image.url }}" class="card-img-top" alt="{{ film.name  }}">
                     <div class="card-body">
-                        <h5 class="card-title">Фильм 1</h5>
-                        <p class="card-text">Описание фильма 1.</p>
-                        <a href="#" class="btn btn-warning">Подробнее</a>
+                        <h5 class="card-title">{{ film.name  }}</h5>
+                        <p class="card-text">{{ film.detail }}</p>
+                        <a href="{% url 'film_detail' film.id %}" class="btn btn-warning">Подробнее</a>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <img src="https://via.placeholder.com/300x450" class="card-img-top" alt="Фильм 2">
-                    <div class="card-body">
-                        <h5 class="card-title">Фильм 2</h5>
-                        <p class="card-text">Описание фильма 2.</p>
-                        <a href="#" class="btn btn-warning">Подробнее</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <img src="https://via.placeholder.com/300x450" class="card-img-top" alt="Фильм 3">
-                    <div class="card-body">
-                        <h5 class="card-title">Фильм 3</h5>
-                        <p class="card-text">Описание фильма 3.</p>
-                        <a href="#" class="btn btn-warning">Подробнее</a>
-                    </div>
-                </div>
-            </div>
+            {% empty %}
+            <p class="text-center">Нет доступных фильмов.</p>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

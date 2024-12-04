@@ -15,7 +15,7 @@ class Products(models.Model):
         ('Зак.','Законнченный'),
         ('В раз','В разработке')
     ]
-    status = models.CharField(max_length=100)
+    status = models.CharField(max_length=100,choices=statuses)
     duration = models.FloatField()
     qualities = [
         ('HD','HD'),
