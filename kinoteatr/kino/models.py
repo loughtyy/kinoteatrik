@@ -33,3 +33,15 @@ class Products(models.Model):
     class Meta:
         verbose_name = 'Произведения'
         verbose_name_plural = 'Произведения'
+        
+
+class Session(models.Model):
+    film = models.ForeignKey(Products, on_delete=models.CASCADE)  
+    session_time = models.DateTimeField()
+    hall_number = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.film.name} - {self.session_time.strftime('%Y-%m-%d %H:%M')} в зале {self.hall_number}"
+    class Meta:
+        verbose_name = 'Сеансы'
+        verbose_name_plural = 'Сеансы'

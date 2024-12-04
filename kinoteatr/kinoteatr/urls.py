@@ -17,10 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from kino import views
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('films/', views.films, name='films'),
     path('contact/', views.contact, name='contact'),
-]
+    path('films/<int:film_id>/', views.film_detail, name='film_detail'),
+    path('sessions/', views.session_schedule, name='session_schedule'),
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

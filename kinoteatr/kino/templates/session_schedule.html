@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Расписание сеансов</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Фильм</th>
+                <th>Время сеанса</th>
+                <th>Номер зала</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for session in sessions %}
+            <tr>
+                <td>{{ session.film.name }}</td>
+                <td>{{ session.session_time|date:"Y-m-d H:i" }}</td>  <!-- Используем фильтр date -->
+                <td>{{ session.hall_number }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
