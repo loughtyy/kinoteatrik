@@ -19,5 +19,8 @@ from django.urls import path
 from kino import views
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('', views.index, name='index'),
+    path('films/', views.films, name='films'),
+    path('contact/', views.contact, name='contact'),
 ]

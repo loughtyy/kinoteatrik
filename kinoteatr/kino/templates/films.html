@@ -1,17 +1,11 @@
 {% extends "base.html" %} 
 {% load static %}
 {% block content %}
-<body>
-    <div class="banner">
-        <h1>Добро пожаловать в наш Кинотеатр!</h1>
-        <p>Посмотрите последние фильмы в комфортной обстановке.</p>
-        <a href="#" class="btn btn-warning">Посмотреть сеансы</a>
-    </div>
-
+<head>
     <div class="container mt-5">
-        <h2 class="text-center">Популярные фильмы</h2>
+        <h2 class="text-center">Доступные фильмы</h2>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-4 movie-card">
                 <div class="card">
                     <img src="https://via.placeholder.com/300x450" class="card-img-top" alt="Фильм 1">
                     <div class="card-body">
@@ -21,7 +15,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 movie-card">
                 <div class="card">
                     <img src="https://via.placeholder.com/300x450" class="card-img-top" alt="Фильм 2">
                     <div class="card-body">
@@ -31,7 +25,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 movie-card">
                 <div class="card">
                     <img src="https://via.placeholder.com/300x450" class="card-img-top" alt="Фильм 3">
                     <div class="card-body">
