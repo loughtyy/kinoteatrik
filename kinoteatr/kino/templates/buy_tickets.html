@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Купить билеты на {{ film.name }}</h1>
+
+    <form method="POST" action="{% url 'buy_tickets' film.id %}">
+        {% csrf_token %}
+    
+        <label for="session">Выберите сеанс:</label>
+        <select name="session" id="session" required>
+            {% for session in sessions %}
+                <option value="{{ session.id }}">
+                    {{ session.session_time }} в зале {{ session.hall_number }}
+                </option>
+            {% endfor %}
+        </select>
+    
+        <button type="submit" class="btn btn-primary mt-3 w-100">Купить билет</button> <!-- Класс w-100 для полной ширины -->
+    </form>
+    
+    <div class="mt-3"> 
+        <a href="{% url 'films' %}" class="btn btn-warning w-100">Назад к фильмам</a> <!-- Класс w-100 для полной ширины -->
+    </div>
+</div>
+{% endblock %}

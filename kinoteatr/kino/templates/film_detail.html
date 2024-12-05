@@ -15,8 +15,10 @@
             <h5>Длительность: {{ film.duration }} мин</h5>
             <h5>Качество: {{ film.get_quality_display }}</h5>
             <h5>Просмотры: {{ film.views }}</h5>
-            <h4 class="mt-4">Купить билеты</h4>
-            <button class="btn btn-success">Купить</button>
+            <form method="post" action="{% url 'buy_tickets' film.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Купить билет</button>
+            </form>
         </div>
     </div>
 </div>

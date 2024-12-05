@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Products(models.Model):
     image = models.ImageField()
@@ -45,3 +46,11 @@ class Session(models.Model):
     class Meta:
         verbose_name = 'Сеансы'
         verbose_name_plural = 'Сеансы'
+
+class Ticket(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    session = models.ForeignKey('Session', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Билет на {self.session.film.name} - {self.session.session_time.strftime('%Y-%m-%d %H:%M')}"

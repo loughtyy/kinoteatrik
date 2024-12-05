@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Покупка билета успешна!</h2>
+    <p>Спасибо за покупку. Ваш билет на фильм "{{ film.name }}" успешно оформлен.</p>
+    <a href="{% url 'film_detail' film.id %}" class="btn btn-primary">Вернуться к фильму</a>
+</div>
+{% endblock %}

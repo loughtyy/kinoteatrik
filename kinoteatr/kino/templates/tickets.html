@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Ваши купленные билеты</h2>
+    {% if tickets %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Фильм</th>
+                    <th>Сеанс</th>
+                    <th>Зал</th>
+                    <th>Дата покупки</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                    <tr>
+                        <td>{{ ticket.session.film.name }}</td>
+                        <td>{{ ticket.session.session_time|date:"Y-m-d H:i" }}</td>
+                        <td>{{ ticket.session.hall_number }}</td>
+                        <td>{{ ticket.created_at|date:"Y-m-d H:i" }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>У вас нет купленных билетов.</p>
+    {% endif %}
+</div>
+{% endblock %}

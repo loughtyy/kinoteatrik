@@ -31,4 +31,7 @@ urlpatterns = [
     path('sessions/', views.session_schedule, name='session_schedule'),
     path('login/', views.login, name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    path('film/<int:film_id>/buy-tickets/', views.BuyTicketsPageView.as_view(), name='buy_tickets'),
+    path('tickets/', views.TicketsView.as_view(), name='tickets'),
+    path('success/', views.success_view, name='success_page'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
