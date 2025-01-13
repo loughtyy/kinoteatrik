@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'kino',
     'bootstrap5',
+    'rest_framework',
+    'article',
 ]
 
 MIDDLEWARE = [
