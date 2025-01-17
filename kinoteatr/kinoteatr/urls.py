@@ -35,4 +35,5 @@ urlpatterns = [
     path('tickets/', views.TicketsView.as_view(), name='tickets'),
     path('success/', views.success_view, name='success_page'),
     path('api/', include('article.urls')),
+    path('', include('snippets.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

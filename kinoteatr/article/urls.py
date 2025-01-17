@@ -1,8 +1,20 @@
-from django.urls import path
+from django.urls import path, include
+from django.contrib.auth.models import User
+from rest_framework import routers, serializers, viewsets
 
-from article import views
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+ class Meta:
+  model = User
+  fields = ['url', 'username', 'email', 'is_staff']
+
+class UserViewSet(viewsets.ModelViewSet):
+ queryset = User.objects.all()
+ serializer_class = UserSerializer
+
+router = routers.DefaultRouter()
+router.register(r'users', UserViewSet)
 
 urlpatterns = [
-    path('api/capitals/', views.GetCapitalInfoView.as_view()),
-    path('main/', views.main_page, name='main_page'),
+ path('', include(router.urls)),
+ path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

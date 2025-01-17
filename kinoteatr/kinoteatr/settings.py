@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'bootstrap5',
     'rest_framework',
     'article',
+    'snippets',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +55,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'article.urls'
+ROOT_URLCONF = 'snippets.urls'
 
 TEMPLATES = [
     {
@@ -136,3 +137,9 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGOUT_REDIRECT_URL = '/'
+
+REST_FRAMEWORK = {
+ 'DEFAULT_PERMISSION_CLASSES': [
+ 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+ ]
+}
