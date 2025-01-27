@@ -34,6 +34,5 @@ urlpatterns = [
     path('film/<int:film_id>/buy-tickets/', views.BuyTicketsPageView.as_view(), name='buy_tickets'),
     path('tickets/', views.TicketsView.as_view(), name='tickets'),
     path('success/', views.success_view, name='success_page'),
-    path('api/', include('article.urls')),
-    path('', include('snippets.urls')),
+    path('api/',include('kino.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

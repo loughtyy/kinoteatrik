@@ -41,8 +41,6 @@ INSTALLED_APPS = [
     'kino',
     'bootstrap5',
     'rest_framework',
-    'article',
-    'snippets',
 ]
 
 MIDDLEWARE = [
@@ -55,7 +53,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'snippets.urls'
+ROOT_URLCONF = 'kinoteatr.urls'
 
 TEMPLATES = [
     {

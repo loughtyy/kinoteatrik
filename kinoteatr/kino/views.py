@@ -4,7 +4,10 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import *
 from django.views import View
-
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .models import Products
+from .serializers import ProductSerializer
 
 def index(request):
     films = Products.objects.all()[:3]
@@ -90,3 +93,19 @@ class TicketForm(forms.ModelForm):
     class Meta:
         model = Ticket
         fields = ['session']
+
+
+class ProductView(APIView):
+    queryset = Products.objects.all()
+    def get(self, request):
+     products = Products.objects.all()
+     serializer = ProductSerializer(products, many=True)
+     return Response({"products": serializer.data})
+    def post(self, request):
+     products = request.data.get('products')
+     serializer = ProductSerializer(data=products)
+     if serializer.is_valid(raise_exception=True):
+      products_saved = serializer.save()
+     return Response({"success": "Product '{}' created successfully".format(products_saved.name)})
+    
+    

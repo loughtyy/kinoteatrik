@@ -6,7 +6,6 @@ class Products(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     types = [
-        ('TVS','TV Series'),
         ('Пол.метр.','Полнометражный' ),
         ('Кор.метр.','Короткометражный'),
     ]
