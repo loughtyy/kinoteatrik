@@ -2,7 +2,9 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import login as lo, authenticate
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from rest_framework import viewsets
 from .models import *
+from rest_framework import status
 from django.views import View
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -80,7 +82,6 @@ class TicketsView(View):
 def success_view(request):
     film_id = request.session.get('selected_film_id')
     if not film_id:
-        #
         return redirect('index') 
 
     film = get_object_or_404(Products, id=film_id)
@@ -94,18 +95,15 @@ class TicketForm(forms.ModelForm):
         model = Ticket
         fields = ['session']
 
-
-class ProductView(APIView):
+class ProductsViewSet(viewsets.ModelViewSet):
+    serializer_class = ProductSerializer
     queryset = Products.objects.all()
-    def get(self, request):
-     products = Products.objects.all()
-     serializer = ProductSerializer(products, many=True)
-     return Response({"products": serializer.data})
-    def post(self, request):
-     products = request.data.get('products')
-     serializer = ProductSerializer(data=products)
-     if serializer.is_valid(raise_exception=True):
-      products_saved = serializer.save()
-     return Response({"success": "Product '{}' created successfully".format(products_saved.name)})
     
+    
+from rest_framework.generics import RetrieveUpdateAPIView
+class SingleProductView(RetrieveUpdateAPIView):
+    queryset = Products.objects.all()
+    serializer_class = ProductSerializer
+
+
     
