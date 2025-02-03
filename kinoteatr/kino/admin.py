@@ -9,4 +9,6 @@ class ProductsAdmin(admin.ModelAdmin):
 @admin.register(Session)
 class SessionAdmin(admin.ModelAdmin):
     list_display = ('film', 'session_time', 'hall_number')
-
+@admin.register(Ticket)
+class TicketAdmin(admin.ModelAdmin):
+    list_display = ('user', 'session', 'created_at')

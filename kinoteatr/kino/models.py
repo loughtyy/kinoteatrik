@@ -53,3 +53,6 @@ class Ticket(models.Model):
 
     def __str__(self):
         return f"Билет на {self.session.film.name} - {self.session.session_time.strftime('%Y-%m-%d %H:%M')}"
+    class Meta:
+        verbose_name = 'Билеты'
+        verbose_name_plural = 'Билеты'
