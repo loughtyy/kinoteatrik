@@ -4,12 +4,10 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from rest_framework import viewsets
 from .models import *
-from rest_framework import status
 from django.views import View
-from rest_framework.response import Response
-from rest_framework.views import APIView
 from .models import Products
 from .serializers import ProductSerializer
+from .serializers import *
 
 def index(request):
     films = Products.objects.all()[:3]
@@ -42,12 +40,12 @@ def login(request):
 class BuyTicketsPageView(View):
       def get(self, request, film_id):
         film = get_object_or_404(Products, id=film_id)
-        sessions = Session.objects.filter(film=film)  # Получаем сеансы для данного фильма
+        sessions = Session.objects.filter(film=film)  
         form = TicketForm() 
         return render(request, 'buy_tickets.html', {
             'film': film,
             'form': form,
-            'sessions': sessions  # Передаем сеансы в контекст
+            'sessions': sessions  
         })
 
       def post(self, request, film_id):
@@ -61,15 +59,15 @@ class BuyTicketsPageView(View):
             ticket.session = form.cleaned_data['session']
             ticket.save()
 
-            request.session['selected_film_id'] = film_id  # Устанавливаем ID фильма в сессии
+            request.session['selected_film_id'] = film_id  
             return redirect('success_page')
         else:
-            # Если форма некорректна, показываем ошибки
-            sessions = Session.objects.filter(film=film)  # Получаем сеансы для данного фильма
+           
+            sessions = Session.objects.filter(film=film)  
             return render(request, 'buy_tickets.html', {
                 'film': film,
                 'form': form,
-                'sessions': sessions  # Передаем сеансы в контекст
+                'sessions': sessions 
             })
 class TicketsView(View):
     def get(self, request):
@@ -98,12 +96,12 @@ class TicketForm(forms.ModelForm):
 class ProductsViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     queryset = Products.objects.all()
-    
-    
-from rest_framework.generics import RetrieveUpdateAPIView
-class SingleProductView(RetrieveUpdateAPIView):
-    queryset = Products.objects.all()
-    serializer_class = ProductSerializer
 
+class SessionViewSet(viewsets.ModelViewSet):
+    serializer_class = SessionSerializer
+    queryset = Session.objects.all()
 
+class TicketViewSet(viewsets.ModelViewSet):
+    serializer_class = TicketSerializer
+    queryset = Ticket.objects.all()
     
