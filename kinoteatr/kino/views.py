@@ -1,13 +1,12 @@
-from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import login as lo, authenticate
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
+from .permissions import IsOwnerOrReadOnly
 from .models import *
 from django.views import View
-from .models import Products
-from .serializers import ProductSerializer
 from .serializers import *
+from django.contrib.auth.models import User
 
 def index(request):
     films = Products.objects.all()[:3]
@@ -96,6 +95,10 @@ class TicketForm(forms.ModelForm):
 class ProductsViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     queryset = Products.objects.all()
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
+
 
 class SessionViewSet(viewsets.ModelViewSet):
     serializer_class = SessionSerializer
@@ -105,3 +108,7 @@ class TicketViewSet(viewsets.ModelViewSet):
     serializer_class = TicketSerializer
     queryset = Ticket.objects.all()
     
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+

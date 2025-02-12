@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.contrib.auth.models import User
 from .models import *
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -15,8 +16,12 @@ class ProductSerializer(serializers.ModelSerializer):
             'duration',
             'quality',
             'views',
-            'created_at'
+            'created_at',
+            'owner'
         ]
+        owner = serializers.ReadOnlyField(source='owner.username')
+
+        
 class SessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Session
@@ -37,3 +42,10 @@ class TicketSerializer(serializers.ModelSerializer):
             'session',
             'created_at'
         ]
+
+
+class UserSerializer(serializers.ModelSerializer):
+    products = serializers.PrimaryKeyRelatedField(many=True, queryset=Products.objects.all())
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'products']
