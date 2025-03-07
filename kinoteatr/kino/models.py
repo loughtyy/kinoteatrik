@@ -1,9 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from pygments.lexers import get_lexer_by_name
-from pygments.formatters.html import HtmlFormatter
-from pygments import highlight
 
 class Products(models.Model):
     image = models.ImageField()
@@ -34,19 +31,7 @@ class Products(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='products')
     highlighted = models.TextField()
 
-    def save(self, *args, **kwargs):
-        """
-        Use the `pygments` library to create a highlighted HTML
-        representation of the code snippet.
-        """
-        lexer = get_lexer_by_name(self.language)
-        linenos = 'table' if self.linenos else False
-        options = {'title': self.title} if self.title else {}
-        formatter = HtmlFormatter(style=self.style, linenos=linenos,
-        full=True, **options)
-        self.highlighted = highlight(self.code, lexer, formatter)
-        super().save(*args, **kwargs)
-
+ 
     def __str__(self):
         return self.name
 
@@ -59,6 +44,7 @@ class Session(models.Model):
     film = models.ForeignKey(Products, on_delete=models.CASCADE)  
     session_time = models.DateTimeField()
     hall_number = models.IntegerField()
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Session', default=1)
 
     def __str__(self):
         return f"{self.film.name} - {self.session_time.strftime('%Y-%m-%d %H:%M')} в зале {self.hall_number}"

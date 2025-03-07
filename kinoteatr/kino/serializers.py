@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from .models import *
 
 class ProductSerializer(serializers.ModelSerializer):
+    highlight = serializers.HyperlinkedIdentityField(view_name='product-highlight', format='html')
+    products = serializers.HyperlinkedRelatedField(many=True, view_name='products-detail', read_only=True)
     class Meta:
         model = Products
         fields = [
@@ -20,6 +22,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'owner'
         ]
         owner = serializers.ReadOnlyField(source='owner.username')
+       
 
         
 class SessionSerializer(serializers.ModelSerializer):
@@ -29,8 +32,10 @@ class SessionSerializer(serializers.ModelSerializer):
             'id',       
             'film',
             'session_time',
-            'hall_number'
+            'hall_number',
+            'owner'
         ]
+        owner = serializers.ReadOnlyField(source='owner.username')
 
 
 class TicketSerializer(serializers.ModelSerializer):
@@ -40,8 +45,10 @@ class TicketSerializer(serializers.ModelSerializer):
             'id',            
             'user',
             'session',
-            'created_at'
+            'created_at',
+           
         ]
+        user = serializers.ReadOnlyField(source='user.username')
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -49,3 +56,4 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'products']
+    

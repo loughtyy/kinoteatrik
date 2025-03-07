@@ -1,6 +1,7 @@
 from django.urls import path, include
 from .views import *
 from rest_framework.routers import DefaultRouter
+from . import views
 
 router = DefaultRouter()
 router.register(r'products', ProductsViewSet, basename='products')
@@ -11,4 +12,6 @@ urlpatterns = router.urls
 
 urlpatterns += [
 path('api-auth/', include('rest_framework.urls')),
+path('Products/<int:pk>/highlight/', views.ProductsHighlight.as_view()),
+path('', views.api_root),
 ]
