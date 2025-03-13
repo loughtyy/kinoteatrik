@@ -140,5 +140,5 @@ class ProductsHighlight(generics.GenericAPIView):
     renderer_classes = [renderers.StaticHTMLRenderer]
     def get(self, request, *args, **kwargs):
         product = self.get_object()
-        return Response(product.highlighted)
+        return Response(product.name)
 

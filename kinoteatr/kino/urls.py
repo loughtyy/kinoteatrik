@@ -12,6 +12,6 @@ urlpatterns = router.urls
 
 urlpatterns += [
 path('api-auth/', include('rest_framework.urls')),
-path('Products/<int:pk>/highlight/', views.ProductsHighlight.as_view()),
+path('Products/<int:pk>/name/', views.ProductsHighlight.as_view()),
 path('', views.api_root),
 ]

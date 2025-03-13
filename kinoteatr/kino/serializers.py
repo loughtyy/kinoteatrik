@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from .models import *
 
 class ProductSerializer(serializers.ModelSerializer):
-    highlight = serializers.HyperlinkedIdentityField(view_name='product-highlight', format='html')
+    highlight = serializers.HyperlinkedIdentityField(view_name='product-name', format='html')
     products = serializers.HyperlinkedRelatedField(many=True, view_name='products-detail', read_only=True)
     class Meta:
         model = Products
@@ -19,7 +19,8 @@ class ProductSerializer(serializers.ModelSerializer):
             'quality',
             'views',
             'created_at',
-            'owner'
+            'owner',
+            'products'
         ]
         owner = serializers.ReadOnlyField(source='owner.username')
        
