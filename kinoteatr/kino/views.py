@@ -135,10 +135,41 @@ def api_root(request, format=None):
 
 from rest_framework import generics
 from rest_framework import renderers
+from rest_framework.response import Response
+from .models import Products
+from .serializers import ProductSerializer  
+
 class ProductsHighlight(generics.GenericAPIView):
     queryset = Products.objects.all()
-    renderer_classes = [renderers.StaticHTMLRenderer]
+    serializer_class = ProductSerializer  
     def get(self, request, *args, **kwargs):
         product = self.get_object()
-        return Response(product.name)
+        serializer = self.get_serializer(product) 
+        return Response(serializer.data)
+    
+class SessionHighlight(generics.GenericAPIView):
+    queryset = Session.objects.all()
+    serializer_class = SessionSerializer 
 
+    def get(self, request, *args, **kwargs):
+        session = self.get_object()
+        serializer = self.get_serializer(session)  
+        return Response(serializer.data) 
+
+class TicketHighlight(generics.GenericAPIView):
+    queryset = Ticket.objects.all()
+    serializer_class = TicketSerializer 
+
+    def get(self, request, *args, **kwargs):
+        ticket = self.get_object()
+        serializer = self.get_serializer(ticket)  
+        return Response(serializer.data)  
+
+class UserHighlight(generics.GenericAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer 
+
+    def get(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = self.get_serializer(user)  
+        return Response(serializer.data)  
