@@ -58,8 +58,13 @@ class TicketSerializer(serializers.ModelSerializer):
         user = serializers.ReadOnlyField(source='user.username')
 
 
+class ProductMinimalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Products
+        fields = ['id', 'name', 'image']
+
 class UserSerializer(serializers.ModelSerializer):
-    products = serializers.PrimaryKeyRelatedField(many=True, queryset=Products.objects.all())
+    products = ProductMinimalSerializer(many=True, read_only=True) 
     highlight = serializers.HyperlinkedIdentityField(view_name='users-highlight', format='html', lookup_field='pk')
 
     class Meta:
