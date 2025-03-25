@@ -1,7 +1,9 @@
 from django.contrib.auth import login as lo, authenticate
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, generics
+from rest_framework.parsers import JSONParser, FormParser
+from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer, AdminRenderer
 from .permissions import IsOwnerOrReadOnly
 from .models import *
 from django.views import View
@@ -52,7 +54,6 @@ class BuyTicketsPageView(View):
         form = TicketForm(request.POST) 
 
         if form.is_valid():
-            # Сохранение билета
             ticket = form.save(commit=False)
             ticket.user = request.user
             ticket.session = form.cleaned_data['session']
@@ -98,6 +99,8 @@ class ProductsViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
+    parser_classes = [JSONParser, FormParser]
+    renderer_classes = [JSONRenderer, BrowsableAPIRenderer, AdminRenderer]
 
 
 class SessionViewSet(viewsets.ModelViewSet):
@@ -106,6 +109,8 @@ class SessionViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
+    parser_classes = [JSONParser, FormParser]
+    renderer_classes = [JSONRenderer, BrowsableAPIRenderer, AdminRenderer]
 
 
 class TicketViewSet(viewsets.ModelViewSet):
@@ -114,6 +119,8 @@ class TicketViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
+    parser_classes = [JSONParser, FormParser]
+    renderer_classes = [JSONRenderer, BrowsableAPIRenderer, AdminRenderer]
 
     
 class UserViewSet(viewsets.ModelViewSet):
@@ -122,22 +129,14 @@ class UserViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
+    parser_classes = [JSONParser, FormParser]
+    renderer_classes = [JSONRenderer, BrowsableAPIRenderer, AdminRenderer]
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.reverse import reverse
 @api_view(['GET'])
-def api_root(request, format=None):
-    return Response({
-    'users': reverse('user-list', request=request, format=format),
-    'products': reverse('product-list', request=request, format=format)
-    })
-
-from rest_framework import generics
-from rest_framework import renderers
-from rest_framework.response import Response
-from .models import Products
-from .serializers import ProductSerializer  
+def api_root(format=None):
+    return Response
 
 class ProductsHighlight(generics.GenericAPIView):
     queryset = Products.objects.all()
