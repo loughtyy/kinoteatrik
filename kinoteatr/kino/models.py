@@ -28,7 +28,7 @@ class Products(models.Model):
     views = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='products')
+
     highlighted = models.TextField()
 
  
@@ -44,7 +44,7 @@ class Session(models.Model):
     film = models.ForeignKey(Products, on_delete=models.CASCADE)  
     session_time = models.DateTimeField()
     hall_number = models.IntegerField()
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Session', default=1)
+
 
     def __str__(self):
         return f"{self.film.name} - {self.session_time.strftime('%Y-%m-%d %H:%M')} в зале {self.hall_number}"

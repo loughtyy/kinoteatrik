@@ -9,21 +9,27 @@ from .models import *
 from django.views import View
 from .serializers import *
 from django.contrib.auth.models import User
+from django.urls import reverse  
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 def index(request):
     films = Products.objects.all()[:3]
-    return render(request,'index.html', {'films':films})
+    return render(request, 'index.html', {'films': films})
+
 def films(request):
     films = Products.objects.all()
     return render(request, 'films.html', {'films': films})
+
 def contact(request):
     return render(request, 'contact.html')
+
 def film_detail(request, film_id):
     film = get_object_or_404(Products, id=film_id)
     return render(request, 'film_detail.html', {'film': film})
 
 def session_schedule(request):
-    sessions = Session.objects.all()  
+    sessions = Session.objects.all()
     return render(request, 'session_schedule.html', {'sessions': sessions})
 
 def login(request):
@@ -39,19 +45,19 @@ def login(request):
     return render(request, 'login.html', {})
 
 class BuyTicketsPageView(View):
-      def get(self, request, film_id):
+    def get(self, request, film_id):
         film = get_object_or_404(Products, id=film_id)
-        sessions = Session.objects.filter(film=film)  
-        form = TicketForm() 
+        sessions = Session.objects.filter(film=film)
+        form = TicketForm()
         return render(request, 'buy_tickets.html', {
             'film': film,
             'form': form,
-            'sessions': sessions  
+            'sessions': sessions
         })
 
-      def post(self, request, film_id):
+    def post(self, request, film_id):
         film = get_object_or_404(Products, id=film_id)
-        form = TicketForm(request.POST) 
+        form = TicketForm(request.POST)
 
         if form.is_valid():
             ticket = form.save(commit=False)
@@ -59,28 +65,28 @@ class BuyTicketsPageView(View):
             ticket.session = form.cleaned_data['session']
             ticket.save()
 
-            request.session['selected_film_id'] = film_id  
+            request.session['selected_film_id'] = film_id
             return redirect('success_page')
         else:
-           
-            sessions = Session.objects.filter(film=film)  
+            sessions = Session.objects.filter(film=film)
             return render(request, 'buy_tickets.html', {
                 'film': film,
                 'form': form,
-                'sessions': sessions 
+                'sessions': sessions
             })
+
 class TicketsView(View):
     def get(self, request):
         if request.user.is_authenticated:
-            tickets = Ticket.objects.filter(user=request.user) 
+            tickets = Ticket.objects.filter(user=request.user)
             return render(request, 'tickets.html', {'tickets': tickets})
         else:
-            return redirect('login') 
- 
+            return redirect('login')
+
 def success_view(request):
     film_id = request.session.get('selected_film_id')
     if not film_id:
-        return redirect('index') 
+        return redirect('index')
 
     film = get_object_or_404(Products, id=film_id)
     return render(request, 'success.html', {'film': film})
@@ -93,82 +99,53 @@ class TicketForm(forms.ModelForm):
         model = Ticket
         fields = ['session']
 
+
 class ProductsViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     queryset = Products.objects.all()
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     parser_classes = [JSONParser, FormParser, MultiPartParser]
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer, AdminRenderer]
 
+    def perform_create(self, serializer):
+        serializer.save()
 
 class SessionViewSet(viewsets.ModelViewSet):
     serializer_class = SessionSerializer
     queryset = Session.objects.all()
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     parser_classes = [JSONParser, FormParser, MultiPartParser]
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer, AdminRenderer]
 
+    def perform_create(self, serializer):
+        serializer.save()
 
 class TicketViewSet(viewsets.ModelViewSet):
     serializer_class = TicketSerializer
     queryset = Ticket.objects.all()
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     parser_classes = [JSONParser, FormParser, MultiPartParser]
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer, AdminRenderer]
 
-    
+    def perform_create(self, serializer):
+        serializer.save()
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     parser_classes = [JSONParser, FormParser, MultiPartParser]
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer, AdminRenderer]
 
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+    def perform_create(self, serializer):
+        serializer.save()
+
 @api_view(['GET'])
-def api_root(format=None):
-    return Response
+def api_root(request, format=None):
+    return Response({
+        'products': reverse('products-list', request=request, format=format),
+        'sessions': reverse('sessions-list', request=request, format=format),
+        'tickets': reverse('tickets-list', request=request, format=format),
+        'users': reverse('users-list', request=request, format=format),
+    })
 
-class ProductsHighlight(generics.GenericAPIView):
-    queryset = Products.objects.all()
-    serializer_class = ProductSerializer  
-    def get(self, request, *args, **kwargs):
-        product = self.get_object()
-        serializer = self.get_serializer(product) 
-        return Response(serializer.data)
-    
-class SessionHighlight(generics.GenericAPIView):
-    queryset = Session.objects.all()
-    serializer_class = SessionSerializer 
-
-    def get(self, request, *args, **kwargs):
-        session = self.get_object()
-        serializer = self.get_serializer(session)  
-        return Response(serializer.data) 
-
-class TicketHighlight(generics.GenericAPIView):
-    queryset = Ticket.objects.all()
-    serializer_class = TicketSerializer 
-
-    def get(self, request, *args, **kwargs):
-        ticket = self.get_object()
-        serializer = self.get_serializer(ticket)  
-        return Response(serializer.data)  
-
-class UserHighlight(generics.GenericAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer 
-
-    def get(self, request, *args, **kwargs):
-        user = self.get_object()
-        serializer = self.get_serializer(user)  
-        return Response(serializer.data)  
