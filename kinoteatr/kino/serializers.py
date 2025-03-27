@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import *
+from rest_framework.validators import UniqueValidator
 
 class ProductSerializer(serializers.ModelSerializer):
     highlight = serializers.HyperlinkedIdentityField(view_name='product-highlight', format='html')
@@ -62,10 +63,12 @@ class ProductMinimalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Products
         fields = ['id', 'name', 'image']
+        
 
 class UserSerializer(serializers.ModelSerializer):
     products = ProductMinimalSerializer(many=True, read_only=True) 
     highlight = serializers.HyperlinkedIdentityField(view_name='users-highlight', format='html', lookup_field='pk')
+    username = serializers.CharField(validators=[UniqueValidator(queryset=User.objects.all())])
 
     class Meta:
         model = User
