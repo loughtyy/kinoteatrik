@@ -44,6 +44,23 @@ def login(request):
             messages.error(request, "Неверные учетные данные")
     return render(request, 'login.html', {})
 
+def registration(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        email = request.POST['email']
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Пользователь с таким именем уже существует.")
+            return redirect('register')
+
+        user = User.objects.create_user(username=username, password=password, email=email)
+
+        lo(request, user)
+
+        return redirect('index')
+
+    return render(request, 'register.html', {})
+
 class BuyTicketsPageView(View):
     def get(self, request, film_id):
         film = get_object_or_404(Products, id=film_id)

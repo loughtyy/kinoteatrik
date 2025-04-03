@@ -30,6 +30,7 @@ urlpatterns = [
     path('films/<int:film_id>/', views.film_detail, name='film_detail'),
     path('sessions/', views.session_schedule, name='session_schedule'),
     path('login/', views.login, name='login'),
+    path('register/', views.registration, name='register'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('film/<int:film_id>/buy-tickets/', views.BuyTicketsPageView.as_view(), name='buy_tickets'),
     path('tickets/', views.TicketsView.as_view(), name='tickets'),

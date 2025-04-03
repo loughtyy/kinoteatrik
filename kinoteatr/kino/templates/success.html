@@ -2,7 +2,17 @@
 {% block content %}
 <div class="container mt-5">
     <h2 class="text-center">Покупка билета успешна!</h2>
+    <div class="container-fluid mt-5 pb-5"></div>
     <p>Спасибо за покупку. Ваш билет на фильм "{{ film.name }}" успешно оформлен.</p>
-    <a href="{% url 'film_detail' film.id %}" class="btn btn-primary">Вернуться к фильму</a>
+    <div class="container-fluid mt-5 pb-5"></div>
+    <div class="d-flex justify-content-between mt-4">
+        <a href="{% url 'film_detail' film.id %}" class="btn btn-primary">Вернуться к фильму</a>
+        <a href="{% url 'tickets' %}" class="btn btn-secondary">Мои билеты</a>
+    </div>
 </div>
+<div class="container-fluid mt-5 pb-5"></div>
+<div class="container-fluid mt-5 pb-5"></div>
+<div class="container-fluid mt-5 pb-5"></div>
+<div class="container-fluid mt-5 pb-5"></div>
+<div class="container-fluid mt-5 pb-1"></div>
 {% endblock %}
